@@ -18,13 +18,11 @@ package app.presentation.foundation;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.support.annotation.Nullable;
 import app.presentation.foundation.dagger.DaggerPresentationComponent;
 import app.presentation.foundation.dagger.PresentationComponent;
 import app.presentation.foundation.dagger.PresentationModule;
 import com.squareup.leakcanary.LeakCanary;
-import java.lang.reflect.Method;
 
 /**
  * Custom Application
@@ -34,28 +32,16 @@ public final class BaseApp extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
+
+    if (LeakCanary.isInAnalyzerProcess(this)) {
+      // This process is dedicated to LeakCanary for heap analysis.
+      // You should not init your app in this process.
+      return;
+    }
+
+    LeakCanary.install(this);
     AppCare.YesSir.takeCareOn(this);
     initDaggerComponent();
-    initLeakCanary();
-  }
-
-  private void initLeakCanary() {
-      LeakCanary.install(this);
-      hackToAvoidExcludedLeaksOnSamsungDevices();
-  }
-
-  /**
-   * https://github.com/square/leakcanary/issues/133
-   */
-  private void hackToAvoidExcludedLeaksOnSamsungDevices() {
-      try {
-          Class cls = Class.forName("android.sec.clipboard.ClipboardUIManager");
-          Method m = cls.getDeclaredMethod("getInstance", Context.class);
-          m.setAccessible(true);
-          m.invoke(null, this);
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
   }
 
   private void initDaggerComponent() {

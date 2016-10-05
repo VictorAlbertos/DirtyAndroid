@@ -111,7 +111,7 @@ ext {
           autovalue         : "1.3",
           butterknife       : "8.4.0",
           rxlifecycle       : "0.7.0",
-          leakCanary        : "1.4-beta2",
+          leakCanary        : "1.5",
           rxbinding         : "0.4.0"
   ]
 }

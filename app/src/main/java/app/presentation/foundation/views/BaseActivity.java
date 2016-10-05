@@ -18,21 +18,15 @@ package app.presentation.foundation.views;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
-import com.trello.rxlifecycle.android.RxLifecycleAndroid;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
-
-import javax.inject.Inject;
-
 import app.presentation.foundation.BaseApp;
 import app.presentation.foundation.dagger.PresentationComponent;
 import app.presentation.foundation.presenter.Presenter;
 import app.presentation.foundation.presenter.ViewPresenter;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Observable;
-import rx_fcm.FcmReceiverUIForeground;
-import rx_fcm.Message;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import javax.inject.Inject;
 
 /**
  * Base class for every new Activity which requires to use a Presenter. Annotate the sub-class with
@@ -41,7 +35,7 @@ import rx_fcm.Message;
  * @param <P> the presenter associated with this Activity.
  */
 public abstract class BaseActivity<P extends Presenter> extends RxAppCompatActivity
-    implements ViewPresenter, FcmReceiverUIForeground {
+    implements ViewPresenter {
   @Inject P presenter;
   private Unbinder unbinder;
 
@@ -119,26 +113,5 @@ public abstract class BaseActivity<P extends Presenter> extends RxAppCompatActiv
    */
   protected PresentationComponent getApplicationComponent() {
     return ((BaseApp) getApplication()).getPresentationComponent();
-  }
-
-  /**
-   * Delegate the call to presenter.
-   */
-  @Override public void onTargetNotification(Observable<Message> message) {
-    presenter.onTargetNotification(message);
-  }
-
-  /**
-   * Delegate the call to presenter.
-   */
-  @Override public void onMismatchTargetNotification(Observable<Message> oMessage) {
-    presenter.onMismatchTargetNotification(oMessage);
-  }
-
-  /**
-   * Delegate the call to presenter.
-   */
-  @Override public boolean matchesTarget(String key) {
-    return presenter.matchesTarget(key);
   }
 }

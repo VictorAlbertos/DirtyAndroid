@@ -21,26 +21,19 @@ import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-
-import org.base_app_android.R;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import app.data.sections.users.UserRepository;
 import app.presentation.foundation.notifications.Notifications;
 import app.presentation.foundation.presenter.Presenter;
-import app.presentation.foundation.presenter.SyncView;
 import app.presentation.foundation.presenter.ViewPresenter;
 import app.presentation.foundation.transformations.Transformations;
 import app.presentation.foundation.views.FragmentsManager;
 import app.presentation.sections.users.list.UsersFragment;
 import app.presentation.sections.users.search.SearchUserFragment;
+import java.util.HashMap;
+import java.util.Map;
+import javax.inject.Inject;
+import org.base_app_android.R;
 
 final class DashboardPresenter extends Presenter<DashboardPresenter.View> {
-  private final UserRepository userRepository;
   private final FragmentsManager fragmentsManager;
 
   private static final Map<Integer, ItemMenu> ITEMS_MENU;
@@ -53,9 +46,8 @@ final class DashboardPresenter extends Presenter<DashboardPresenter.View> {
   }
 
   @Inject DashboardPresenter(Transformations transformations, Notifications notifications,
-                             SyncView syncView, UserRepository userRepository, FragmentsManager fragmentsManager) {
-    super(transformations, notifications, syncView);
-    this.userRepository = userRepository;
+      FragmentsManager fragmentsManager) {
+    super(transformations, notifications);
     this.fragmentsManager = fragmentsManager;
   }
 
@@ -65,20 +57,13 @@ final class DashboardPresenter extends Presenter<DashboardPresenter.View> {
     replaceDrawerFragment(R.id.drawer_users);
 
     view.setNavigationItemSelectedListener(menuItem -> {
-      //just for demo purpose
-      if (menuItem.getItemId() == R.id.drawer_mock_user) {
-        userRepository.mockAFcmNotification().subscribe();
-        return true;
-      }
-
       replaceDrawerFragment(menuItem.getItemId());
       view.closeDrawer();
       return true;
     });
   }
 
-  @VisibleForTesting
-  void replaceDrawerFragment(@IdRes int idSelectedMenu) {
+  @VisibleForTesting void replaceDrawerFragment(@IdRes int idSelectedMenu) {
     ItemMenu itemMenu = ITEMS_MENU.get(idSelectedMenu);
     Class<? extends Fragment> classFragment = itemMenu.classFragment();
 
@@ -91,7 +76,7 @@ final class DashboardPresenter extends Presenter<DashboardPresenter.View> {
   interface View extends ViewPresenter {
 
     boolean replaceFragment(FragmentsManager fragmentsManager,
-                            Class<? extends Fragment> classFragment);
+        Class<? extends Fragment> classFragment);
 
     void setNavigationItemSelectedListener(
         NavigationView.OnNavigationItemSelectedListener listener);

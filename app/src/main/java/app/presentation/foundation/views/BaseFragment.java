@@ -18,7 +18,6 @@ package app.presentation.foundation.views;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentController;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,9 +31,6 @@ import butterknife.Unbinder;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import com.trello.rxlifecycle.components.support.RxFragment;
 import javax.inject.Inject;
-import rx.Observable;
-import rx_fcm.FcmReceiverUIForeground;
-import rx_fcm.Message;
 
 /**
  * Base class for every new Fragment which requires to use a Presenter. Annotate the sub-class with
@@ -43,7 +39,7 @@ import rx_fcm.Message;
  * @param <P> the presenter associated with this Fragment.
  */
 public abstract class BaseFragment<P extends Presenter> extends RxFragment
-    implements ViewPresenter, FcmReceiverUIForeground {
+    implements ViewPresenter {
   @Inject P presenter;
   private Unbinder unbinder;
 
@@ -129,26 +125,5 @@ public abstract class BaseFragment<P extends Presenter> extends RxFragment
   protected PresentationComponent getApplicationComponent() {
     return ((BaseApp) getActivity().getApplication())
         .getPresentationComponent();
-  }
-
-  /**
-   * Delegate the call to presenter.
-   */
-  @Override public void onTargetNotification(Observable<Message> message) {
-    presenter.onTargetNotification(message);
-  }
-
-  /**
-   * Delegate the call to presenter.
-   */
-  @Override public void onMismatchTargetNotification(Observable<Message> oMessage) {
-    presenter.onMismatchTargetNotification(oMessage);
-  }
-
-  /**
-   * Delegate the call to presenter.
-   */
-  @Override public boolean matchesTarget(String key) {
-    return presenter.matchesTarget(key);
   }
 }

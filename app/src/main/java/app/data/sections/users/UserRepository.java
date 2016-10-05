@@ -16,19 +16,15 @@
 
 package app.data.sections.users;
 
-import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
-import app.data.foundation.fcm.FcmMessageReceiver;
 import app.data.foundation.net.NetworkResponse;
 import com.fernandocejas.frodo.annotation.RxLogObservable;
 import io.reactivecache.ProviderGroup;
 import io.reactivecache.ReactiveCache;
 import io.rx_cache.Reply;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import rx.Observable;
-import rx_fcm.internal.RxFcmMock;
 
 public class UserRepository {
   private static final int FIRST_DEFAULT_ID = 0, USERS_PER_PAGE = 50;
@@ -77,34 +73,5 @@ public class UserRepository {
         .compose(networkResponse.process());
   }
 
-  @RxLogObservable
-  public Observable<Void> addNewUser(User user) {
-    return cacheProvider.read(FIRST_DEFAULT_ID)
-        .doOnNext(users -> users.add(0, user))
-        .compose(cacheProvider.replace(FIRST_DEFAULT_ID))
-        .map(ignore -> null);
-  }
-
-  @RxLogObservable
-  public Observable<Void> mockAFcmNotification() {
-    return Observable.just(null)
-        .delay(3, TimeUnit.SECONDS)
-        .flatMap(ignore -> {
-          Bundle payload = new Bundle();
-
-          payload.putString("payload", "{\n"
-              + "\t\"id\":\"0\",\n"
-              + "\t\"login\": \"FcmUserMock\",\n"
-              + "\t\"avatar_url\":\"https://cdn0.iconfinder.com/data/icons/octicons/1024/mark-github-256.png\"\n"
-              + "}");
-          payload.putString("rx_fcm_key_target", FcmMessageReceiver.USERS_FCM);
-          payload.putString("title", "Received a new user mock");
-          payload.putString("body", "Go to users screen and check it!");
-
-          RxFcmMock.Notifications.newNotification(payload);
-
-          return Observable.just(null);
-        });
-  }
 
 }

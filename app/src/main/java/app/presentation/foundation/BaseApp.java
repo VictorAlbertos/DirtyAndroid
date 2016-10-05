@@ -20,17 +20,11 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.Nullable;
-import app.data.foundation.fcm.FcmMessageReceiver;
-import app.data.foundation.fcm.FcmTokenReceiver;
 import app.presentation.foundation.dagger.DaggerPresentationComponent;
 import app.presentation.foundation.dagger.PresentationComponent;
 import app.presentation.foundation.dagger.PresentationModule;
-import app.presentation.foundation.fcm.FcmReceiverBackground;
 import com.squareup.leakcanary.LeakCanary;
-
 import java.lang.reflect.Method;
-
-import rx_fcm.internal.RxFcm;
 
 /**
  * Custom Application
@@ -42,8 +36,7 @@ public final class BaseApp extends Application {
     super.onCreate();
     AppCare.YesSir.takeCareOn(this);
     initDaggerComponent();
-    initGcm();
-      initLeakCanary();
+    initLeakCanary();
   }
 
   private void initLeakCanary() {
@@ -69,11 +62,6 @@ public final class BaseApp extends Application {
     presentationComponent = DaggerPresentationComponent.builder()
         .presentationModule(new PresentationModule(this))
         .build();
-  }
-
-  private void initGcm() {
-    RxFcm.Notifications.init(this, FcmMessageReceiver.class, FcmReceiverBackground.class);
-    RxFcm.Notifications.onRefreshToken(FcmTokenReceiver.class);
   }
 
   /**

@@ -3,6 +3,7 @@ apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.fernandocejas.frodo'
 apply from: '../code_quality_tools/quality.gradle'
+apply from: '../fresh_start/fresh_start.gradle'
 
 buildscript {
   repositories {
@@ -121,7 +122,6 @@ dependencies {
   provided "org.glassfish:javax.annotation:10.0-b28"
   apt "com.google.dagger:dagger-compiler:${versions.dagger}"
   compile "com.google.dagger:dagger:${versions.dagger}"
-  compile 'com.google.firebase:firebase-core:9.2.1'
   compile 'com.github.VictorAlbertos:RxFcm:0.0.5'
   compile 'io.reactivex:rxjava:1.1.10'
   debugCompile "com.squareup.leakcanary:leakcanary-android:${versions.leakCanary}"
@@ -157,6 +157,7 @@ dependencies {
   compile "com.trello:rxlifecycle-components:${versions.rxlifecycle}"
 
   compile "com.github.miguelbcr:OkAdapters:0.2.1"
+  compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
 
   //Testing
   testCompile 'junit:junit:4.12'
@@ -179,6 +180,3 @@ configurations.all {
   resolutionStrategy.force "com.android.support:support-annotations:${versions.support}"
   resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
 }
-
-// Works if you put this line at the bottom of this file, nor at the top
-apply plugin: 'com.google.gms.google-services'

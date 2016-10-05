@@ -19,8 +19,8 @@ package app.presentation.sections.dashboard;
 import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.view.MenuItem;
 import app.presentation.foundation.notifications.Notifications;
 import app.presentation.foundation.presenter.Presenter;
 import app.presentation.foundation.presenter.ViewPresenter;
@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 import org.base_app_android.R;
+import rx.Observable;
 
 final class DashboardPresenter extends Presenter<DashboardPresenter.View> {
   private final FragmentsManager fragmentsManager;
@@ -56,11 +57,11 @@ final class DashboardPresenter extends Presenter<DashboardPresenter.View> {
 
     replaceDrawerFragment(R.id.drawer_users);
 
-    view.setNavigationItemSelectedListener(menuItem -> {
-      replaceDrawerFragment(menuItem.getItemId());
-      view.closeDrawer();
-      return true;
-    });
+    view.clicksItemSelected()
+        .subscribe(menuItem -> {
+          replaceDrawerFragment(menuItem.getItemId());
+          view.closeDrawer();
+        });
   }
 
   @VisibleForTesting void replaceDrawerFragment(@IdRes int idSelectedMenu) {
@@ -78,8 +79,7 @@ final class DashboardPresenter extends Presenter<DashboardPresenter.View> {
     boolean replaceFragment(FragmentsManager fragmentsManager,
         Class<? extends Fragment> classFragment);
 
-    void setNavigationItemSelectedListener(
-        NavigationView.OnNavigationItemSelectedListener listener);
+    Observable<MenuItem> clicksItemSelected();
 
     void setCheckedItemMenu(@IdRes int id);
 

@@ -29,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import rx.Observable;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
@@ -48,19 +49,20 @@ public final class DashboardPresenterTest {
   @Before public void init() {
     dashboardPresenterUT = new DashboardPresenter(transformations,
         notifications, fragmentsManager);
+    when(view.clicksItemSelected()).thenReturn(Observable.never());
   }
 
   @Test public void Verify_OnBindView() {
     dashboardPresenterUT.onBindView(view);
 
-    verify(view).setNavigationItemSelectedListener(any());
+    verify(view).clicksItemSelected();
     verify(view).replaceFragment(any(FragmentsManager.class), any());
   }
 
   @Test public void Verify_OnBindView_With_Current_Fragment() {
     dashboardPresenterUT.onBindView(view);
 
-    verify(view).setNavigationItemSelectedListener(any());
+    verify(view).clicksItemSelected();
     verify(view).replaceFragment(any(FragmentsManager.class), any());
   }
 

@@ -30,7 +30,9 @@ import app.presentation.foundation.views.BaseActivity;
 import app.presentation.foundation.views.FragmentsManager;
 import app.presentation.foundation.views.LayoutResActivity;
 import butterknife.BindView;
+import com.jakewharton.rxbinding.support.design.widget.RxNavigationView;
 import org.base_app_android.R;
+import rx.Observable;
 
 @LayoutResActivity(R.layout.dashboard_activity)
 public final class DashBoardActivity extends BaseActivity<DashboardPresenter>
@@ -73,15 +75,14 @@ public final class DashBoardActivity extends BaseActivity<DashboardPresenter>
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
-    if (drawerToggle.onOptionsItemSelected(item)) {
-      return true;
-    } else if (item.getItemId() == android.R.id.home) onBackPressed();
+    if (drawerToggle.onOptionsItemSelected(item)) return true;
+    else if (item.getItemId() == android.R.id.home) onBackPressed();
+
     return super.onOptionsItemSelected(item);
   }
 
-  @Override public void setNavigationItemSelectedListener(
-      NavigationView.OnNavigationItemSelectedListener listener) {
-    navigationView.setNavigationItemSelectedListener(listener);
+  @Override public Observable<MenuItem> clicksItemSelected() {
+    return RxNavigationView.itemSelections(navigationView);
   }
 
   @Override public void setCheckedItemMenu(@IdRes int id) {

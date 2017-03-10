@@ -1,3 +1,5 @@
+## [DISCLAIMER] Branch 1.x will not be any longer actively maintained. Upgrade to RxJava 2.x asap.
+
 # DirtyAndroid
 
 A dirty approach for truly client Android applications. 

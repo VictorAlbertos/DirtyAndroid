@@ -1,3 +1,7 @@
+:warning: Deprecated :warning:
+
+Use [KDirtyAndroid](https://github.com/VictorAlbertos/KDirtyAndroid) instead 
+
 # DirtyAndroid
 
 A dirty approach for truly client Android applications. 
